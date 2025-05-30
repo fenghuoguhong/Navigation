@@ -1,0 +1,68 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'com.auto.chery.map.navigation'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.auto.chery.map.navigation"
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        viewBinding true
+    }
+
+    signingConfigs {
+        config {
+            storeFile file(RELEASE_KEY_STORE_PATH)
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+            storePassword RELEASE_STORE_PASSWORD
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.config
+
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.config
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def version = "${android.defaultConfig.versionName}"
+            def createTime = new Date().format("yyyy-MM-dd-kkmmss", TimeZone.getTimeZone("GMT+08:00"))
+            def apkName = "KikaNavigation_${version}_${createTime}_${output.outputFileName}"
+            output.outputFileName = apkName  // 指定apk输出文件名
+            // }
+        }
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    androidTestImplementation libs.espresso.core
+}
