@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MainActivity extends Activity {
     private boolean isFinishing = false;
@@ -35,10 +36,12 @@ public class MainActivity extends Activity {
         if (!isFinishing && !isDestroyed()) {
             try {
                 super.onResume();
-            } catch (IllegalStateException e) {
+            } catch (Exception e) {
                 if (e.getMessage().contains("did not call finish()")) {
                     finish();
                 }
+                Log.i("isa MainActivity", "onResume error!!!");
+                e.printStackTrace();
             }
         }
     }
